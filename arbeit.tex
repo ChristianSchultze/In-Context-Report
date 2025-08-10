@@ -1,0 +1,60 @@
+\documentclass[]{report}   % list options between brackets
+
+% type user-defined commands here
+\input{preamble.tex}
+\input{acros.tex}
+
+\newcommand{\myTitle}{Titel\xspace}
+\newcommand{\mySubtitle}{Master Lab Computer Science\xspace}
+\newcommand{\myDegree}{\xspace}
+\newcommand{\myName}{Autor\xspace}
+\newcommand{\myBirth}{Geboren am, Ort\xspace}
+\newcommand{\myProf}{Der prof oder PD\xspace}
+\newcommand{\mySupervisor}{Postdoc\xspace}
+\newcommand{\myFaculty}{Faculty of Mathematics and Natural Sciences\xspace}
+\newcommand{\myDepartment}{Institute\xspace}
+\newcommand{\myUni}{Rheinische Friedrich-Wilhelms-Universität Bonn\xspace}
+\newcommand{\myLocation}{Bonn\xspace}
+\newcommand{\myTime}{\today\xspace}
+\newcommand{\myVersion}{\classicthesis}
+
+
+\begin{document}
+\pagenumbering{Roman}
+\input{kapitel/deckblatt/Titlepage.tex}
+
+\tableofcontents
+\cleardoublepage
+
+%\chapter*{Danksagung}
+%\input{thanks.tex}
+\cleardoublepage
+
+\pagenumbering{arabic}
+\chapter{Introduction}             % chapter 1
+\label{einleitung}
+\input{kapitel/Einleitung.tex}
+\chapter{Foundations}             % chapter 2
+\label{literatur}
+\input{kapitel/literatur.tex}
+\chapter{Implementation Details}             % chapter 3
+\label{implementierung}
+\input{kapitel/Implementierung.tex}
+\chapter{Results}             % chapter 4
+\label{experimente}
+\input{kapitel/Experimente.tex}
+%\chapter{Conclusion and Future Work}             % chapter 6
+\label{schluss}
+\input{kapitel/schluss.tex}
+
+\printglossary[type=\acronymtype, title=Abbreviations, toctitle=Abbreviations]
+
+\printglossary[title=Glossar, toctitle=Glossar]
+
+\printbibliography
+
+\appendix
+
+\input{anhang.tex}
+
+\end{document}
