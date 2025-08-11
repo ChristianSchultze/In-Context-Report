@@ -6,6 +6,21 @@
 \section{Model}
 \label{impl:model}
 
+	\begin{figure}
+	\begin{tikzpicture}
+	\node at (0,0) (A)  {\includegraphics[height=.8\textheight]{abbildungen/architecture.pdf}};
+	\end{tikzpicture}
+\end{figure}
+
 \section{Training and Inference}
 \label{impl:train}
+
+	\begin{figure}
+	\begin{tikzpicture}
+	\node at (0,0) (A)  {$
+		\begin{aligned}\text{GNLL} &= \frac{1}{2}\left(\text{log}(2\pi) + \text{log}(\sigma^2) + \frac{((\text{target} - \mu)^2)}{2 e^{\text{log}(\sigma^2)}}\right)\\
+		\end{aligned}
+		$};
+	\end{tikzpicture}
+\end{figure}
 
