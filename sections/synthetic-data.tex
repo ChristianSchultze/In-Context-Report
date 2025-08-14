@@ -1,0 +1,40 @@
+We sample functions from a multivariate normal distribution with an RBF kernel and a randomly chosen length scale. The functions are defined on a grid of 128 points on the interval $[0,1]$. From these 128 points, a subset of 5 to 50 points is chosen randomly to be the set of context points. We use this subset as model-input. Our train datasets consist of 100.000 functions and test dataset consist of 1000 functions. Test datasets have fixed subset sizes(\autoref{tab:fun_subset}). We generate two versions of datasets. In both versions the RBF Scale values for each sampled function are drawn from a beta-distribution. Version A uses parameters $\alpha = 2, \beta = 10$ and Version B uses $\alpha = 2, \beta = 5$(\autoref{tab:rbf_scale}). So in total we generate two training datasets and eight test datasets. \autoref{fig:beta_scales} shows the distribution from which the RBF scale values are being drawn in Version A and B. The lower the RBF Scale is, the more strongly the sampled functions vary in a given time frame. We can see this exemplary in \autoref{fig:gaussian}, where the most right function with RBF Scale of $0.05$ varies much more than the left most function with RBF Scale $0.27$. Therefore, Version A Datasets contain much more strongly varying functions and we consider it more difficult than Version B.
+
+\begin{table}[]
+	\centering
+	\caption{Number of functions and context point subset size.}
+	\begin{tabular}{c c c c c c}
+		\toprule
+		& Train & \multicolumn{4}{c}{Test}\\
+		\midrule
+		Functions & 100K & \multicolumn{4}{c}{1K}\\
+		Subset size & 5-50 & 5 & 10 & 50 & 100  \\\bottomrule
+	\end{tabular}
+\label{tab:fun_subset}
+\end{table}
+
+\begin{table}[]
+	\centering
+	\caption{Beta distribution parameters and resulting mean for the sampled RBF Scale values.}
+	\begin{tabular}{c c c}
+		\toprule
+		& Version A & Version B\\
+		\midrule
+		Alpha & 2 & 2\\
+		Beta & 10 & 5  \\\midrule
+		Scale Mean & 0.15 & 0.3\\\bottomrule
+	\end{tabular}
+\label{tab:rbf_scale}
+\end{table}
+
+
+\begin{figure}
+	\centering
+	\resizebox{0.4\textwidth}{!}{
+	\input{figures/beta}
+	}
+	\caption{Beta distributions for Version A and B from which the RBF scale is sampled.}
+	\label{fig:beta_scales}
+\end{figure}
+
+The size $n$ of the context point subsets is sampled uniformly $n\sim \mathcal{U}(5,50)$ and the resulting distribution is used for both train datasets.  For the test datasets $n$ is fixed. The subsets are sampled uniformly from all possible subsets of size $n$, with the original grid always being 128 points. To be more in line with real world observations we add noise to the context points. We draw the noise from $\mathcal{N}(0,\sigma)$ with a standard deviation $sigma$, which is itself sampled from $\mathcal{N}(0,0.1)$.

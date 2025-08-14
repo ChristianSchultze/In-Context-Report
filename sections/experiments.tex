@@ -1,0 +1,53 @@
+\subsection{Implementation}
+\label{ex:implementation}
+ON GIthub...
+
+\subsection{Gaussian Process fitting}
+
+\subsection{Transformer Training}
+\label{ex:training}
+Our training objective is the gaussian negative log-likelyhood loss (\autoref{eq:loss}), processing the outputs from both decoders. This loss function enables the model to take into account the uncertainty that results from gaps between the input points. Note that we are predicting $\mu$ and $\text{log} (\sigma^2)$ with the two decoders, so their results replace the mean and log variance in the loss equation.
+
+\begin{align}
+\mathcal{L} = \frac{1}{2}\left(\text{log}(2\pi) + \text{log}(\sigma^2) + \frac{((\text{target} - \mu)^2)}{2 e^{\text{log}(\sigma^2)}}\right) \label{eq:loss}
+\end{align}
+
+We use the AdamW optimizer without scheduler and validate twice per epoch. We save the best model regarding the validation GNNL loss with the fixed validation dataset consisting of 10\% of all data. If not otherwise stated, \autoref{tab:hyperparams} list the used hyperparameters. We train on a local GPU cluster, using one Nvidia GA102GL GPU, 50GB RAM and four cores of an Intel Xeon Silver 4309Y CPU. Training for 200 epochs takes about 3 hours with each epoch complete in less than a minute.
+
+\begin{table}[]
+	\centering
+	\caption{Training hyperparameters and model configuration}
+	\begin{tabular}{c c c c}
+		\toprule
+		\multicolumn{2}{c}{Training} & \multicolumn{2}{c}{Model} \\
+		\midrule
+		epochs & 200 & dimension & 256 \\
+		learning rate & 1e-04 & layers & 10\\
+		weight decay & 1e-04 & heads & 2  \\
+		batch size & 256 & \\\bottomrule
+	\end{tabular}
+	\label{tab:hyperparams}
+\end{table}
+
+We observe convergence for training models on both dataset versions, while model B shows a significantly lower validation loss than model A (\autoref{fig:loss_plot}). This is due to the dataset B being significantly less challenging. We observe that in this case, despite using the AdamW optimizer, training is sensitive to learning rate changes. Using a learning rate of 1e-04 shows good results, while training with a learning rate of 1e-02 leads to a diverging behaviour (\autoref{fig:lr_loss_plot}). Furthermore, we observe that increasing the number of hidden dimensions leads to a slight increase in performance, as well as a less stable training (\autoref{fig:lr_loss_plot}.
+
+\begin{figure*}
+	\centering
+	\resizebox{0.6\textwidth}{!}{
+		\input{figures/plots/training/final_loss}
+		\input{figures/plots/training/final_val_loss}
+	}
+\label{fig:loss_plot}
+\caption{Convergence behavior plots using the RMSE Loss regarding the mean prediction. Left: Comparison between train and validation loss for model A. Right: Validation Loss comparison between model A and B.}
+\end{figure*}
+
+\begin{figure*}
+	\centering
+	\resizebox{0.6\textwidth}{!}{
+		\input{figures/plots/training/lr}
+		\input{figures/plots/training/final_dim}
+	}
+\caption{Convergence behavior plots using the RMSE Loss regarding the mean prediction. Left: Validation loss comparison between low and high learning rate. Right: Validation loss comparison between models with increasing hidden dimension.}
+\label{fig:lr_loss_plot}
+\end{figure*}
+
