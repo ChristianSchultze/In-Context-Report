@@ -1,12 +1,12 @@
-We train our model using the pytorch Lightning framework \cite{falcon2019pytorch}, loading hyper parameters from a YAML configuration file. We train with batches with 256 padded sequences. These sequences contain indices and values. For input data we use a padding mask to exclude padding values from normalization. Our target sequences are of a fixed length of 128. Thus, no padding is needed and padding values have not to be considered for loss calculation.
+We train our model using the pytorch Lightning framework \cite{falcon2019pytorch}, loading hyper parameters from a YAML configuration file. We train in batches with 256 padded sequences. These sequences contain indices and values. For input data, we use a padding mask to exclude padding values from normalization. Our target sequences are of a fixed length of 128. Thus, no padding is needed and padding values have not to be considered for loss calculation.
 
-Our training objective is the gaussian negative log-likelyhood loss (\autoref{eq:loss}), processing the outputs from both decoders. This loss function enables the model to take into account the uncertainty that results from gaps between the input points. Note that we are predicting $\mu$ and $\text{log} (\sigma^2)$ with the decoder. This means, the model results replace the mean and log variance in the loss equation.
+Our training objective is the Gaussian negative log-likelyhood loss (\autoref{eq:loss}), processing the outputs of both decoders. This loss function enables the model to take into account the uncertainty that results from the gaps between the input points. Note that we are predicting $\mu$ and $\text{log} (\sigma^2)$ with the decoder. This means that the model results replace the mean and log variance in the loss equation.
 
 \begin{align}
 \mathcal{L} = \frac{1}{2}\left(\text{log}(2\pi) + \text{log}(\sigma^2) + \frac{((\text{target} - \mu)^2)}{2 e^{\text{log}(\sigma^2)}}\right) \label{eq:loss}
 \end{align}
 
-We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and validate twice per epoch. We save the best model regarding the validation GNNL loss with the fixed validation dataset consisting of 10\% of all data. If not otherwise stated, \autoref{tab:hyperparams} list the used hyperparameters. We train on a local GPU cluster, using one Nvidia GA102GL GPU, 50GB RAM and four cores of an Intel Xeon Silver 4309Y CPU. Training for 200 epochs takes about 3 hours with each epoch complete in less than a minute.
+We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and validate twice per epoch. We save the best model regarding the validation GNNL loss, with the fixed validation dataset consisting of 10\% of all data. If not otherwise stated, \autoref{tab:hyperparams} lists the used hyperparameters. We train on a local GPU cluster, using one Nvidia GA102GL GPU, 50GB RAM and four cores of an Intel Xeon Silver 4309Y CPU. Training for 200 epochs takes about 3 hours, with each epoch completed in less than a minute.
 
 \begin{table}[]
 	\centering
@@ -23,7 +23,7 @@ We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and 
 	\label{tab:hyperparams}
 \end{table}
 
-We observe convergence for training models on both dataset versions, while model B shows a significantly lower validation loss than model A (\autoref{fig:loss_plot}). This is due to the dataset B being significantly less challenging. Furthermore, we observe that increasing the number of hidden dimensions leads to a slight increase in performance, as well a less stable training.
+We observe convergence for training models on both versions of the dataset, while model B shows a significantly lower validation loss than model A (\autoref{fig:loss_plot}). This is because dataset B is significantly less challenging. Furthermore, we observe that increasing the number of hidden dimensions leads to a slight increase in performance, as well as a less stable training.
 
 \begin{figure*}
 	\centering
@@ -32,9 +32,9 @@ We observe convergence for training models on both dataset versions, while model
 		\input{figures/plots/training/final_val_loss}
 		\input{figures/plots/training/final_dim}
 	}
-\caption{Convergence behavior plots using the RMSE Loss regarding the mean prediction. Left: Comparison between train and validation loss for model A. Middle: Validation Loss comparison between model A and B. Right: Validation loss comparison between models with increasing hidden dimension.}
-\label{fig:loss_plot}
+	\caption{Convergence behaviour plots using the RMSE Loss regarding the mean prediction. Left: Comparison between train and validation loss for model A. Middle: Validation Loss comparison between model A and B. Right: Validation loss comparison between models with increasing hidden dimension.}
+	\label{fig:loss_plot}
 \end{figure*}
 
-We use the posterior distribution of a Gaussian Process as baseline. The GP has access to the true prior distribution from which the data has been sampled and has to be adjusted for noise levels. TODO: gaussian noise
+We use the posterior distribution of a Gaussian Process as the baseline. The GP has access to the true prior distribution from which the data have been sampled and has to be adjusted for noise levels. TODO: gaussian noise
 

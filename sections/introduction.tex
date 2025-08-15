@@ -1,8 +1,8 @@
-Accurately modelling a wide variety of functions enables the imputation of missing values and creation of continuous data for further processing. This is necessary for empirical real world data, where gaps between discrete measurements need to be filled.
+Accurate modeling of a wide variety of functions enables the imputation of missing values in time series data and the creation of continuous data for further processing. We assume that for a given set of observations, there exists an underlying function that describes the data. Our goal is to model this underlying function such that we can predict all function values and therefore impute missing values. Empirical real-world data often consist of discrete measurements that need to be imputed to apply continuous mathematical tools.
 
 One example from the field of astronomy are luminosity values from Cepheid variable stars. Cepheid stars change their luminosity periodically, as visible in \autoref{fig:cepheid_image}. Crucially, as discovered by the astronomer Henrietta Leavitt, the frequency of those periods directly correlates to their absolute luminosity. Knowing the absolute luminosity of a star is very useful, as it allows astronomers to calculate the distance to that star.
 
-Early in the 20th century there was an ongoing debate, whether the andromeda galaxy, formerly known as andromeda nebula, is part of our own galaxy or rather a galaxy of its own. By discovering cepheid variable stars in the andromeda galaxy and using Leavitts Law, the distance to the andromeda galaxy could be calculated and the andromeda galaxy was recognized as such. \cite{gaßnerAstroBook}
+Before the twentieth century it was not possible to measure distances of more than a few hundred lightyears. This was important for the debate of whether the Andromeda galaxy, formerly known as the Andromeda nebula, is part of our own galaxy or rather a galaxy of its own. By discovering cepheid variable stars in the Andromeda galaxy and using Leavitts Law, the distance could be calculated and the Andromeda galaxy was recognized as such. \cite{gaßnerAstroBook}
 
 \begin{figure}[h]
 	\centering
@@ -11,6 +11,6 @@ Early in the 20th century there was an ongoing debate, whether the andromeda gal
 	\label{fig:cepheid_image}
 \end{figure}
 
-Estimating the underlying function given the provided data in \autoref{fig:cepheid_image} would allow to remove the present noise and apply further processing like calculating extrema of that function and computing the frequency based on that. This would then enable to calculate the distance to the star from which the data has been collected.
+Estimating the underlying function given the provided data in \autoref{fig:cepheid_image} would allow removal of the present noise and apply further processing, such as calculating the extrema of that function and computing the frequency based on that. This would then enable us to calculate the distance to the star from which the data have been collected.
 
-We use synthetic time series data to train a model that interpolates the underlying function and imputes missing values. We sample our data from a multivariate normal distribution and train a transformer model to estimate unseen values given a certain number of context points. We follow the general approach from \citet{seifner2025zeroshotimputationfoundationinference}, while using transformers instead of LSTMs and estimating the actual function, instead of derivatives.
+We use synthetic time-series data to train a model that interpolates the underlying function and imputes missing values. We sample our data from a multivariate normal distribution and train a transformer model to estimate unseen values given a certain number of context points. We follow the general approach from \citet{seifner2025zeroshotimputationfoundationinference}, while using transformers instead of LSTMs and estimating the actual function, instead of derivatives.
