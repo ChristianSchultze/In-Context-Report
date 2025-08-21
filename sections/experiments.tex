@@ -1,4 +1,17 @@
-We train our model using the pytorch Lightning framework \cite{falcon2019pytorch}, loading hyper parameters from a YAML configuration file. We train in batches with 256 padded sequences. These sequences contain indices and values. For input data, we use a padding mask to exclude padding values from normalization. Our target sequences are of a fixed length of 128. Thus, no padding is needed and padding values have not to be considered for loss calculation.
+We train our model using the pytorch Lightning framework \cite{falcon2019pytorch}. This has the advantage, that we do not need to implement the optimization process, logging and model saving ourself. We load hyper parameters from a YAML configuration file. This allows us to easily adjust hyper parameters for our experiments.
+
+\begin{figure*}
+	\centering
+	\resizebox{0.9\textwidth}{!}{
+		\input{figures/plots/training/final_loss}
+		\input{figures/plots/training/final_val_loss}
+		\input{figures/plots/training/final_dim}
+	}
+	\caption{Convergence behaviour plots using the RMSE Loss regarding the mean prediction. Left: Comparison between train and validation loss for model A. Middle: Validation Loss comparison between model A and B. Right: Validation loss comparison between models with increasing hidden dimension.}
+	\label{fig:loss_plot}
+\end{figure*}
+
+We train in batches with 256 padded sequences. These sequences contain indices and values. For input data, we use a padding mask to exclude padding values from normalization. Our target sequences are of a fixed length of 128 elements and therefore, no padding is needed. This means, padding values have not to be considered for loss calculation.
 
 Our training objective is the Gaussian negative log-likelyhood loss (\autoref{eq:loss}), processing the outputs of both decoders. This loss function enables the model to take into account the uncertainty that results from the gaps between the input points. Note that we are predicting $\mu$ and $\text{log} (\sigma^2)$ with the decoder. This means that the model results replace the mean and log variance in the loss equation.
 
@@ -10,7 +23,7 @@ We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and 
 
 \begin{table}[]
 	\centering
-	\caption{Training hyperparameters and model configuration}
+	\caption{Training hyperparameters and model configuration.}
 	\begin{tabular}{c c c c}
 		\toprule
 		\multicolumn{2}{c}{Training} & \multicolumn{2}{c}{Model} \\
@@ -25,16 +38,19 @@ We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and 
 
 We observe convergence for training models on both versions of the dataset, while model B shows a significantly lower validation loss than model A (\autoref{fig:loss_plot}). This is because dataset B is significantly less challenging. Furthermore, we observe that increasing the number of hidden dimensions leads to a slight increase in performance, as well as a less stable training.
 
-\begin{figure*}
-	\centering
-	\resizebox{0.9\textwidth}{!}{
-		\input{figures/plots/training/final_loss}
-		\input{figures/plots/training/final_val_loss}
-		\input{figures/plots/training/final_dim}
-	}
-	\caption{Convergence behaviour plots using the RMSE Loss regarding the mean prediction. Left: Comparison between train and validation loss for model A. Middle: Validation Loss comparison between model A and B. Right: Validation loss comparison between models with increasing hidden dimension.}
-	\label{fig:loss_plot}
-\end{figure*}
+We use the posterior distribution of a Gaussian Process as the baseline. The GP has access to the true prior distribution from which the data have been sampled and the standard deviation with which the additive noise has been sampled. This baseline struggles with predicting values for functions, that have been sampled with a low RBF-Scale value. \autoref{tab:rbf_scale_gp_comparison} shows that the Loss increases significantly increases when the RBF-Scale is below 0.1. Furthermore, the mean and standard deviation of the predicted $\sigma$ values increases significantly. As explained in \autoref{preliminaries}, we speculate that this is the result of the model assuming no or little correlation between not so distant points and therefore reverting to the prior mean and variance values.
 
-We use the posterior distribution of a Gaussian Process as the baseline. The GP has access to the true prior distribution from which the data have been sampled and has to be adjusted for noise levels. TODO: gaussian noise
+\begin{table}[]
+	\centering
+	\caption{Comparison between GP results on functions sampled with high and low RBF-Scale. For this experiment we generated another test dataset for Version-A, sampling the number of context points randomly between 5 and 50. From the 1000 generated functions, 294 have a RBF-Score of less than 0.1. We compare the RMSE Loss, as well as the standard deviation $\sigma$ for each prediction. We compute the max and standard deviation value for all $\sigma$ values in each prediction and report the average values over all predictions.}
+	\begin{tabular}{c c c c}
+		\toprule
+		Scale & RMSE Loss & mean $\sigma$ & std $\sigma$\\
+		\midrule
+		$\geq 0.1$ & 0.53 & 0.51 & 0.21\\
+		$< 0.1$ & 0.86 & 0.80 & 0.36\\\bottomrule
+	\end{tabular}
+	\label{tab:rbf_scale_gp_comparison}
+\end{table}
+
 

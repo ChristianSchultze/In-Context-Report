@@ -7,10 +7,10 @@ Before the twentieth century it was not possible to measure distances of more th
 \begin{figure}[h]
 	\centering
 	\includegraphics[width = 0.5\textwidth]{figures/Cephei}
-	\caption{Phase lightcurve of variable star Delta Cephei \tiny\url{ https://de.wikipedia.org/wiki/Datei:Delta_Cephei_lightcurve.jpg}}
+	\caption{Lightcurve data from the variable star Delta Cephei, over two periods. \tiny\url{ https://de.wikipedia.org/wiki/Datei:Delta_Cephei_lightcurve.jpg}}
 	\label{fig:cepheid_image}
 \end{figure}
 
 Estimating the underlying function given the provided data in \autoref{fig:cepheid_image} would allow removal of the present noise and apply further processing, such as calculating the extrema of that function and computing the frequency based on that. This would then enable us to calculate the distance to the star from which the data have been collected.
 
-We use synthetic time-series data to train a model that interpolates the underlying function and imputes missing values. We sample our data from a multivariate normal distribution and train a transformer model to estimate unseen values given a certain number of context points. We follow the general approach from \citet{seifner2025zeroshotimputationfoundationinference}, while using transformers instead of LSTMs and estimating the actual function, instead of derivatives.
+We use synthetic time-series data to train a model that interpolates the underlying function and imputes missing values. We sample our data from a multivariate normal distribution and train a transformer model to estimate unseen values given a certain number of context points. We follow the general approach from \citet{seifner2025zeroshotimputationfoundationinference}, while using transformers instead of LSTMs and estimating the actual function, instead of derivatives. We compare our results with a Gaussian Process baseline and discuss how the prior distribution and number of context points influences the performance. Finally, we use our transformer model to impute missing values for Cepheid star luminosity values and show that the model trained on synthetic data is applicable to real world data.

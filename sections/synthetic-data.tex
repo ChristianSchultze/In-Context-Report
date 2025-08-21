@@ -2,7 +2,7 @@ We sample functions from a multivariate normal distribution with an RBF kernel a
 
 \begin{table}[]
 	\centering
-	\caption{Number of functions and context point subset size.}
+	\caption{Number of functions and context point subset size for training and test dataset. The number of context points for the training datasets vary, while for test datasets they are fixed.}
 	\begin{tabular}{c c c c c c}
 		\toprule
 		& Train & \multicolumn{4}{c}{Test}\\
@@ -15,10 +15,10 @@ We sample functions from a multivariate normal distribution with an RBF kernel a
 
 \begin{table}[]
 	\centering
-	\caption{Beta distribution parameters and resulting mean for the sampled RBF Scale values.}
+	\caption{Beta distribution parameters and resulting mean for the sampled RBF-Scale values for both dataset versions.}
 	\begin{tabular}{c c c}
 		\toprule
-		& Version A & Version B\\
+		& Version-A & Version-B\\
 		\midrule
 		Alpha & 2 & 2\\
 		Beta & 10 & 5  \\\midrule
@@ -33,7 +33,7 @@ We sample functions from a multivariate normal distribution with an RBF kernel a
 	\resizebox{0.4\textwidth}{!}{
 		\input{figures/beta}
 	}
-	\caption{Beta distributions for Version A and B from which the RBF scale is sampled.}
+	\caption{Beta distributions for Version-A and -B from which the RBF scale is sampled. We consider the datasets for Version-A to be more challenging, however it has to be considered, that there is a large overlap between the distributions.}
 	\label{fig:beta_scales}
 \end{figure}
 

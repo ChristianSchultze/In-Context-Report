@@ -1,13 +1,8 @@
-For evaluation, we use eight test datasets (four for each version) with a fixed number of context points (\autoref{tab:fun_subset}). We use the posterior distribution of a Gaussian Process as the baseline. All models are evaluated on all 1.000 functions in each dataset.
-As shown in \autoref{tag:results}, both models outperform the GP baseline. One reason for this are the uncertainty spikes visible in \autoref{fig:gp_comp}. This happens for RBF-Scales below $0.1$.
-
-For all models, we observe increasing performance with an increasing number of context points. This is clearly visible in \autoref{fig:result_plot}, with the left and middle plots showing a lot of uncertainty due to the low number of context points. The right plot shows the prediction much closer to the target despite a large amount of noise. Furthermore, evaluations on the Version-B datasets show better performance than evaluations on Version-A datasets. This is expected as Dataset-A is more challenging. Model-B showing similar performance to Model-A on Dataset-A, despite being trained on the less challenging Dataset-B, might be sign of good generalization capabilities. However, as shown in \autoref{fig:beta_scales}, the RBF-Scale distributions show a large overlap. For this reason, Model-B has seen sufficient examples of challenging functions during training and the similar performance cannot be attributed to generalization.
-
 \begin{table}[]
-	\caption{Evaluation results on all eight test dataset with RMSE Loss for mean compared to target values}
+	\caption{Evaluation results on all eight test dataset with RMSE Loss for the mean prediction compared to the target values. We compare our GP baseline to both Model-A and -B, while both are tested with all test datasets and therefore evaluated on both dataset versions. }
 	\begin{tabular}{c c c c c}
 		\toprule
-		Dataset & Context Points & GP & model A & model B\\
+		Dataset & Context Points & GP & Model-A & Model-B\\
 		\midrule
 		\multirow{4}{*}{A (2,10)} & 5 & 0.91 & 0.72 & 0.71\\
 		&10& 0.78 & 0.50 & 0.49\\ 
@@ -21,16 +16,11 @@ For all models, we observe increasing performance with an increasing number of c
 	\label{tag:results}
 \end{table}
 
-\begin{figure}
-	\centering
-	\resizebox{0.5\textwidth}{!}{
-		\input{figures/plots/comparison/63}
-	}
-	\caption{Comparison plots between model A and the GP baseline.}
-	\label{fig:gp_comp}
-\end{figure}
 
-\begin{figure*}
+For evaluation, we use eight test datasets (four for each version) with a fixed number of context points (\autoref{tab:fun_subset}). We use the posterior distribution of a Gaussian Process as the baseline. All models are evaluated on all 1.000 functions in each dataset.
+As shown in \autoref{tag:results}, both models outperform the GP baseline. One reason for this are the uncertainty spikes visible in \autoref{fig:gp_comp}. This happens for RBF-Scales below $0.1$.
+
+\begin{figure*}[t]
 	\centering
 	\resizebox{0.9\textwidth}{!}{
 		\input{figures/plots/modelA/5/11}
@@ -41,7 +31,16 @@ For all models, we observe increasing performance with an increasing number of c
 	\label{fig:result_plot}
 \end{figure*}
 
-To apply our model to real-world data and seriously test its generalization capabilities, we process Cepheid star luminosity data. \autoref{fig:cepheid} shows prediction results for Model-A. Due to missing ground truth data, we cannot evaluate the performance numerically. We observe a comparatively high uncertainty despite a high number of context points, especially during the low luminosity phases. Otherwise, these results show good generalization from training on synthetic data and applying the same model on real world observations.
+For all models, we observe increasing performance with an increasing number of context points. This is clearly visible in \autoref{fig:result_plot}, with the left and middle plots showing a lot of uncertainty due to the low number of context points. The right plot shows the prediction much closer to the target despite a large amount of noise. Furthermore, evaluations on the Version-B datasets show better performance than evaluations on Version-A datasets. This is expected as Dataset-A is more challenging. Model-B showing similar performance to Model-A on Dataset-A, despite being trained on the less challenging Dataset-B, might be sign of good generalization capabilities. However, as shown in \autoref{fig:beta_scales}, the RBF-Scale distributions show a large overlap. For this reason, Model-B has seen sufficient examples of challenging functions during training and the similar performance cannot be attributed to generalization.
+
+\begin{figure}
+	\centering
+	\resizebox{0.5\textwidth}{!}{
+		\input{figures/plots/comparison/63}
+	}
+	\caption{Comparison plots between model A and the GP baseline.}
+	\label{fig:gp_comp}
+\end{figure}
 
 \begin{figure}
 	\centering
@@ -51,3 +50,6 @@ To apply our model to real-world data and seriously test its generalization capa
 	\caption{Model A Prediction result on luminosity values (unit flux) for a cepheid variable star over 24 hours. Data from Benkő et al. \cite{Benk__2014}}
 	\label{fig:cepheid}
 \end{figure}
+
+To apply our model to real-world data and seriously test its generalization capabilities, we process Cepheid star luminosity data. \autoref{fig:cepheid} shows prediction results for Model-A. Due to missing ground truth data, we cannot evaluate the performance numerically. We observe a comparatively high uncertainty despite a high number of context points, especially during the low luminosity phases. Otherwise, these results show good generalization from training on synthetic data and applying the same model on real world observations.
+
