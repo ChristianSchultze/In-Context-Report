@@ -19,7 +19,7 @@ Our training objective is the Gaussian negative log-likelyhood loss (\autoref{eq
 \mathcal{L} = \frac{1}{2}\left(\text{log}(2\pi) + \text{log}(\sigma^2) + \frac{((\text{target} - \mu)^2)}{2 e^{\text{log}(\sigma^2)}}\right) \label{eq:loss}
 \end{align}
 
-We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and validate twice per epoch. We save the best model regarding the validation GNNL loss, with the fixed validation dataset consisting of 10\% of all data. If not otherwise stated, \autoref{tab:hyperparams} lists the used hyper parameters. We train on a local GPU cluster, using one Nvidia GA102GL GPU, 50GB RAM and four cores of an Intel Xeon Silver 4309Y CPU. Training for 200 epochs takes about 3 hours, with each epoch completed in less than a minute.
+We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and validate twice per epoch. We save the best model regarding the validation GNNL loss, with the fixed validation dataset consisting of 10\% of all data. If not otherwise stated, \autoref{tab:hyperparams} lists the used hyper parameters. We train on a GPU cluster, using one Nvidia GA102GL GPU, 50GB RAM and four cores of an Intel Xeon Silver 4309Y CPU. Training for 200 epochs takes about 3 hours, with each epoch completed in less than a minute.
 
 \begin{table}[]
 	\centering
@@ -36,13 +36,13 @@ We use the AdamW (\citet{loshchilov2017fixing}) optimizer without scheduler and 
 	\label{tab:hyperparams}
 \end{table}
 
-We observe convergence for training models on both versions of the dataset, while model B shows a significantly lower validation loss than model A (\autoref{fig:loss_plot}). This is because dataset B is significantly less challenging. Furthermore, we observe that increasing the number of hidden dimensions leads to a slight increase in performance, as well as a less stable training.
+We observe convergence for training models on both versions of the dataset, while model B shows a significantly lower validation loss than model A (\autoref{fig:loss_plot}). This is because dataset B is significantly less challenging. Furthermore, we observe that increasing the number of hidden dimensions leads to a slight increase in performance, as well as a less stable training (\autoref{fig:loss_plot}).
 
-We use the posterior distribution of a Gaussian Process as the baseline. The GP has access to the true prior distribution from which the data have been sampled and the standard deviation with which the additive noise has been sampled. This baseline struggles with predicting values for functions that have been sampled with a low RBF-Scale value. \autoref{tab:rbf_scale_gp_comparison} shows that the Loss increases significantly when the RBF-Scale is below 0.1. Furthermore, the mean and standard deviation of the predicted $\sigma$ values increases significantly. As explained in \autoref{preliminaries}, we speculate that this is the result of the model assuming little or no correlation between not so distant points and therefore reverting to the prior mean and variance values.
+We use the posterior distribution of a Gaussian Process as the baseline. The GP has access to the true prior distribution from which the data has been sampled and the standard deviation with which the additive noise has been sampled. This baseline struggles with predicting values for functions that have been sampled with a low RBF-Scale value. \autoref{tab:rbf_scale_gp_comparison} shows that the Loss increases significantly when the RBF-Scale is below 0.1. Furthermore, the mean and standard deviation of the predicted $\sigma$ values increases significantly. As explained in \autoref{preliminaries}, we speculate that this is the result of the model assuming little or no correlation between not so distant points and therefore reverting to the prior mean and variance values.
 
 \begin{table}[]
 	\centering
-	\caption{Comparison between GP results on functions sampled with high and low RBF-Scale. For this experiment we generated another test dataset for Version-A, sampling the number of context points randomly between 5 and 50. From the 1000 generated functions, 294 have a RBF-Score of less than 0.1. We compare the RMSE Loss, as well as the standard deviation $\sigma$ for each prediction. We compute the max and standard deviation value for all $\sigma$ values in each prediction and report the average values over all predictions.}
+	\caption{Comparison of GP results on functions sampled with high and low RBF-Scale. For this experiment we generated another test dataset for Version-A, sampling the number of context points randomly between 5 and 50. From the 1000 generated functions, 294 have a RBF-Score of less than 0.1. We compare the RMSE Loss, as well as the standard deviation $\sigma$ for each prediction. We compute the mean and standard deviation value for all $\sigma$ values in each prediction and report the average values over all predictions.}
 	\begin{tabular}{c c c c}
 		\toprule
 		Scale & RMSE Loss & mean $\sigma$ & std $\sigma$\\
